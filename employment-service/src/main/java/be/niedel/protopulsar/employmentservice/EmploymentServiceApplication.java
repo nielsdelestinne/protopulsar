@@ -9,13 +9,14 @@ public class EmploymentServiceApplication {
 
     private static final String URL = "pulsar://localhost:6650";
     private static final String TOPIC = "recruitment";
-    private static final int AMOUNT_OF_MESSAGES_TO_CONSUME = 3;
+    private static final int AMOUNT_OF_MESSAGES_TO_CONSUME = 30;
 
     public static void main(String[] args) {
         try (
                 var pulsarClient = new PulsarConsumerClient(URL);
                 var pulsarTopicConsumer = pulsarClient.createConsumerFor(TOPIC, CandidateSelectedEvent.class)) {
             startConsumingMessages(pulsarTopicConsumer, AMOUNT_OF_MESSAGES_TO_CONSUME);
+            System.out.println("Job's done... closing down EmploymentServiceApplication");
         } catch (Exception e) {
             e.printStackTrace();
         }
