@@ -1,0 +1,14 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package be.niedel.protopulsar.employmentservice.contract;
+
+import "common.proto";
+
+message CreateEmployerRequest {
+  Id id = 1;
+  string name = 2;
+}
+
+message CreateEmployerResponse {
+  Id id = 1;
+}
