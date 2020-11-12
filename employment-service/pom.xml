@@ -13,38 +13,22 @@
     <artifactId>employment-service</artifactId>
 
     <properties>
-        <spring-boot-starter.version>2.3.4.RELEASE</spring-boot-starter.version>
-        <h2.version>1.4.200</h2.version>
-        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
-        <employment-service-contract.version>1.0.0</employment-service-contract.version>
+        <recruitment-service-contract.version>1.0.0</recruitment-service-contract.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>be.niedel</groupId>
-            <artifactId>employment-service-contract</artifactId>
-            <version>${employment-service-contract.version}</version>
+            <artifactId>recruitment-service-contract</artifactId>
+            <version>${recruitment-service-contract.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot-starter.version}</version>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>${spring-boot-starter.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-            <version>${h2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jakarta.xml.bind-api.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
         </dependency>
     </dependencies>
 

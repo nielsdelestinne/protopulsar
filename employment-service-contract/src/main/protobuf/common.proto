@@ -1,7 +1,0 @@
-syntax = "proto3";
-option java_multiple_files = true;
-package be.niedel.protopulsar.employmentservice.contract;
-
-message Id {
-  string value = 1;
-}

@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>employment-service-contract</artifactId>
+    <artifactId>recruitment-service-contract</artifactId>
     <version>1.0.0</version>
 
     <properties>

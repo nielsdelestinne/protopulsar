@@ -1,24 +1,35 @@
 package be.niedel.protopulsar.recruitmentservice;
 
-import be.niedel.protopulsar.employmentservice.contract.CreateEmployerRequest;
-import be.niedel.protopulsar.employmentservice.contract.Id;
-
-import java.util.Arrays;
+import be.niedel.protopulsar.recruitmentservice.contract.CandidateSelectedEvent;
+import be.niedel.protopulsar.recruitmentservice.contract.CandidateSelectedEvent.Name;
+import org.apache.pulsar.client.api.Producer;
 
 public class RecruitmentServiceApplication {
 
-    public static void main(String[] args) {
-        EmploymentClient employmentClient = new EmploymentClient();
+    private static final String URL = "pulsar://localhost:6650";
+    private static final String TOPIC = "recruitment";
 
-        employmentClient.createEmployer(
-                CreateEmployerRequest.newBuilder()
-                        .setId(Id.newBuilder().setValue("123"))
-                        .setName("Jimmy")
+    public static void main(String[] args) {
+
+        try (
+                var pulsarClient = new PulsarProducerClient(URL);
+                var pulsarTopicProducer = pulsarClient.createProducerFor(TOPIC, CandidateSelectedEvent.class)) {
+            pulsarTopicProducer.send(createCandidateSelectedEvent("Jim", "Jimmens"));
+            pulsarTopicProducer.send(createCandidateSelectedEvent("Sarah", "Sarajevo"));
+            pulsarTopicProducer.send(createCandidateSelectedEvent("John", "Johnson"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static CandidateSelectedEvent createCandidateSelectedEvent(String firstName, String lastName) {
+        return CandidateSelectedEvent.newBuilder()
+                .setName(Name.newBuilder()
+                        .setFirstName(firstName)
+                        .setLastName(lastName)
                         .build())
-                .thenAccept(response -> {
-                    System.out.println(response);
-                    System.out.println(Arrays.toString(response.toByteArray()));
-                }).join();
+                .build();
     }
 
 }

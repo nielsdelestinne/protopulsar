@@ -13,14 +13,22 @@
     <artifactId>recruitment-service</artifactId>
 
     <properties>
-        <employment-service-contract.version>1.0.0</employment-service-contract.version>
+        <recruitment-service-contract.version>1.0.0</recruitment-service-contract.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>be.niedel</groupId>
-            <artifactId>employment-service-contract</artifactId>
-            <version>${employment-service-contract.version}</version>
+            <artifactId>recruitment-service-contract</artifactId>
+            <version>${recruitment-service-contract.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pulsar</groupId>
+            <artifactId>pulsar-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
         </dependency>
     </dependencies>
 

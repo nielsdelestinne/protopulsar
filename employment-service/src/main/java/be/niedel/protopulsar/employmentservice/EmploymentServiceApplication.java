@@ -1,35 +1,39 @@
 package be.niedel.protopulsar.employmentservice;
 
-import be.niedel.protopulsar.employmentservice.contract.CreateEmployerRequest;
-import be.niedel.protopulsar.employmentservice.contract.Id;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
+import be.niedel.protopulsar.recruitmentservice.contract.CandidateSelectedEvent;
+import org.apache.pulsar.client.api.Consumer;
+import org.apache.pulsar.client.api.Message;
+import org.apache.pulsar.client.api.PulsarClientException;
 
-import static org.apache.tomcat.util.codec.binary.Base64.encodeBase64String;
-
-@SpringBootApplication
 public class EmploymentServiceApplication {
 
+    private static final String URL = "pulsar://localhost:6650";
+    private static final String TOPIC = "recruitment";
+    private static final int AMOUNT_OF_MESSAGES_TO_CONSUME = 3;
+
     public static void main(String[] args) {
-        SpringApplication.run(EmploymentServiceApplication.class, args);
+        try (
+                var pulsarClient = new PulsarConsumerClient(URL);
+                var pulsarTopicConsumer = pulsarClient.createConsumerFor(TOPIC, CandidateSelectedEvent.class)) {
+            startConsumingMessages(pulsarTopicConsumer, AMOUNT_OF_MESSAGES_TO_CONSUME);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> {
-
-            System.out.println(
-                    encodeBase64String(CreateEmployerRequest.newBuilder()
-                            .setId(Id.newBuilder().setValue("123"))
-                            .setName("Jimmy")
-                            .build()
-                            .toByteArray())
-            );
-
-        };
+    private static void startConsumingMessages(Consumer<CandidateSelectedEvent> consumer, int amountOfMessagesToConsume) throws PulsarClientException {
+        while (amountOfMessagesToConsume > 0) {
+            Message<CandidateSelectedEvent> message = consumer.receive();
+            CandidateSelectedEvent event = message.getValue();
+            try {
+                System.out.println("Message received from: " + message.getProducerName());
+                System.out.println(event.toString());
+                consumer.acknowledge(message);
+                amountOfMessagesToConsume -= 1;
+            } catch (Exception e) {
+                consumer.negativeAcknowledge(message);
+            }
+        }
     }
 
 }
